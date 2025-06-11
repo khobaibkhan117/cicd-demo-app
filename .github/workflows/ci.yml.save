@@ -25,13 +25,3 @@ jobs:
       run: |
         docker build -t ${{ secrets.DOCKER_USERNAME }}/flask-app:latest .
         docker push ${{ secrets.DOCKER_USERNAME }}/flask-app:latest
-    - name: Deploy to EC2 via SSH
-      uses: appleboy/ssh-action@v0.1.10
-      with:
-        host: 54.89.159.165  # <- Yahan apna EC2 IP daalna
-        username: ubuntu
-        key: ${{ secrets.EC2_SSH_KEY }}
-        script: |
-          docker rm -f flask-container || true
-          docker pull khobaib117/flask-app:latest
-          docker run -d -p 80:5000 --name flask-container khobaib117/flask-app:latest
